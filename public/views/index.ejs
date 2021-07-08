@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('./partials/header.ejs') %>
+
+<body>
+    <h2> <a href="/">Alphabet Encoding</a> </h2>
+    <h3>The Home Page</h3>
+    <div class="form-container">
+        <main class="form-main">
+            <form action="/chat" class="user-form">
+                <div class="user-form-div">
+                    <label for="username" class="user-form-label">Username</label>
+                    <input type="text" name="username" id="username" placeholder="Enter username" required>
+                </div>
+                <div class="user-form-div">
+                    <label for="create-room" class="user-form-label">
+                        <input type="radio" id="create-room" name="create-or-join" onclick="showHideTextBox()" checked>Create Room
+                    </label>
+                    <label for="join-room" class="user-form-label">
+                        <input type="radio" id="join-room" name="create-or-join" onclick="showHideTextBox()">Join Room
+                    </label>
+                </div>
+                <div class="user-form-div" id="room-code-div" style=" display: none">
+                    <label for="roomcode" class="user-form-label">Room Code</label>
+                    <input type="text" id="room-code-text-box" placeholder="Enter room code" required>
+                </div>
+                <div class="form-submit-div">
+                    <button type="submit" class="form-submit">Start Chat</button>
+                </div>
+            </form>
+        </main>
+    </div>
+    <!-- <p> <a href="/chat"> Start Chat</a> </p> -->
+    <script type="text/javascript">
+    function showHideTextBox() {
+        let room_code_div = document.getElementById("room-code-div");
+        let room_code_text_box = document.getElementById("room-code-text-box");
+        if (document.getElementById("join-room").checked) {
+            room_code_div.style.display = "block";
+            room_code_text_box.required = true;
+        } else {
+            room_code_div.style.display = "none";
+            room_code_text_box.required = false;
+        }
+    }
+    </script>
+</body>
+
+</html>

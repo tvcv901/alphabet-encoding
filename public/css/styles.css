@@ -1,0 +1,86 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --dark-color-a: #075E54;
+    --dark-color-b: #128C7E;
+    --light-color: #e6ffe9;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    background: var(--light-color);
+    margin: 20px;
+}
+
+a {
+    text-decoration: none;
+}
+
+.form-container {
+    max-width: 500px;
+    margin: 80px auto;
+    color: #fff;
+}
+
+.user-form-div {
+    margin: 25px;
+    background-color: var(--dark-color-b);
+}
+
+.form-submit-div {
+    text-align: center;
+}
+
+.form-submit {
+    cursor: pointer;
+    padding: 5px 15px;
+    background: var(--light-color);
+    color: var(--dark-color-a);
+    border: 0;
+    font-size: 17px;
+}
+
+.user-form-label {
+    background-color: var(--dark-color-b);
+}
+
+.form-main {
+    padding: 30px 40px;
+    background-color: var(--dark-color-b);
+    margin-bottom: 20px;
+}
+
+.form-main .user-form-div {
+    margin-bottom: 20px;
+}
+
+.form-main label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-main input[type='text'] {
+    font-size: 16px;
+    padding: 5px;
+    height: 40px;
+    width: 100%;
+}
+
+.form-main select {
+    font-size: 16px;
+    padding: 5px;
+    height: 40px;
+    width: 100%;
+}
+
+.join-main .form-submit {
+    margin-top: 20px;
+    width: 100%;
+}
