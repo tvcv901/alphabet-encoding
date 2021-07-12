@@ -21,6 +21,6 @@ app.get('/chat', (req, res) => {
     res.render('chat');
 });
 
-app.get('/404', (req, res) => {
+app.get('*', (req, res) => {
     res.render('404');
 });
