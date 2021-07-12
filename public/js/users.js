@@ -2,11 +2,15 @@
 const socket = io();
 
 const chatForm = document.getElementById('chat-form');
+const chatMessages = document.querySelector('.chat-messages');
 
 // receive messages from server
 socket.on('message', msg => {
 	console.log(msg); // works
 	outputMessage(msg);
+
+	// scroll down
+	chatMessages.scrollTop = chatMessages.scrollHeight;
 });
 
 chatForm.addEventListener('submit', (e) => {
@@ -41,3 +45,9 @@ function outputMessage(message) {
 	// adds this div to the chat area
 	document.querySelector('.chat-messages').appendChild(div);
 }
+
+//Prompt the user before leave chat room
+document.getElementById('leave-btn').addEventListener('click', () => {
+  const leaveRoom = confirm('Are you sure you want to leave the chatroom?');
+  if (leaveRoom) { window.location.assign('http://localhost:3000/'); }
+});
