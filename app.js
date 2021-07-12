@@ -21,6 +21,23 @@ const io = socket(server);
 
 io.on("connection", socket => {
     console.log("Made socket connection", socket.id);
+
+    // welcome user
+    socket.emit('message', 'Welcome!');
+
+    // broadcast when a user connects
+    socket.broadcast.emit('message', 'A user has joined the chat');
+
+    // when user disconnects
+    socket.on('disconnect', () => {
+        io.emit('message', 'A user has left the chat');
+    });
+
+    // listen for messages
+    socket.on('chatMessage', msg => {
+        console.log(msg); // works!!!
+        io.emit('message', msg);
+    });
 });
 
 // handling routes
