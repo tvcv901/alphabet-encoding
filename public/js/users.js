@@ -9,7 +9,7 @@ socket.on('message', msg => {
 	console.log(msg); // works
 	outputMessage(msg);
 
-	// scroll down
+	// scroll to bottom when new message is sent
 	chatMessages.scrollTop = chatMessages.scrollHeight;
 });
 

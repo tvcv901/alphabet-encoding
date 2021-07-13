@@ -30,6 +30,7 @@ io.on("connection", socket => {
 
     // when user disconnects
     socket.on('disconnect', () => {
+        console.log('Socket disconnected', socket.id);
         io.emit('message', 'A user has left the chat');
     });
 
