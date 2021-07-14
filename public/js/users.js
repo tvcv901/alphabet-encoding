@@ -12,7 +12,7 @@ const getParams = new URL(chatUrl).searchParams;
 // extract username and roomname from URL
 const username = getParams.get('username');
 const roomname = getParams.get('room-name');
-console.log(username, roomname); // works
+console.log(username, roomname);
 
 // send current user details to server
 socket.emit('joinRoom', { username, roomname });
@@ -32,12 +32,14 @@ socket.on('message', msg => {
 	chatMessages.scrollTop = chatMessages.scrollHeight;
 });
 
-chatForm.addEventListener('submit', (e) => {
-	e.preventDefault();
 
+// when send button is clicked, page should not reload
+chatForm.addEventListener('submit', (e) => {
+	e.preventDefault(); // prevents page from reloading
+
+	// fetches the message and removes spaces at the end
 	let msg = e.target.elements.msg.value.trim();
 	if (!msg) { return false; }
-	console.log(msg); // works!!!
 
 	// emit message to server
 	socket.emit('chatMessage', msg, roomname); // works
@@ -81,9 +83,9 @@ function outputRoomName(room) {
 
 // write user list in DOM
 function outputUsers(users) {
-	userList.innerHTML = '';
-	users.forEach((user) => {
-		const li = document.createElement('li');
+	userList.innerHTML = ''; 	// make the users list element empty
+	users.forEach((user) => {	// adds the user to the list one-by-one
+		const li = document.createElement('li');	
 		li.innerText = user.username;
 		userList.appendChild(li);
 	});

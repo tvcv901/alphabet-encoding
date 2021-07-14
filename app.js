@@ -3,8 +3,6 @@ const socket = require('socket.io');
 const formatMessage = require('./utils/messages');
 const { userJoin, getCurrentUser, userLeave, getRoomUsers } = require('./utils/users');
 
-let roomCodes = new Set();
-
 // creating the app
 const app = express();
 
@@ -26,6 +24,7 @@ const io = socket(server);
 io.on("connection", socket => {
     console.log("Made socket connection", socket.id);
 
+    // run when a user joins
     socket.on('joinRoom', ({ username, roomname }) => {
         // add user to list of users
         const user = userJoin(socket.id, username, roomname);
@@ -42,7 +41,7 @@ io.on("connection", socket => {
     });
 
 
-    // listen for messages
+    // listen for messages from users
     socket.on('chatMessage', msg => {
         const user = getCurrentUser(socket.id);
         io.to(user.room).emit('message', formatMessage(user.username, msg));
@@ -50,8 +49,10 @@ io.on("connection", socket => {
 
     // when user disconnects
     socket.on('disconnect', () => {
-        const user = userLeave(socket.id);
         console.log("Socket disconnected", socket.id);
+        
+        // remove user from list of users
+        const user = userLeave(socket.id);
         io.to(user.room).emit('message', formatMessage('', `${user.username} has left the chat`));
 
         // send room details to client
