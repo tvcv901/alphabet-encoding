@@ -1,5 +1,9 @@
 const express = require('express');
 const socket = require('socket.io');
+const formatMessage = require('./utils/messages');
+const { userJoin, getCurrentUser, userLeave, getRoomUsers } = require('./utils/users');
+
+let roomCodes = new Set();
 
 // creating the app
 const app = express();
@@ -22,22 +26,36 @@ const io = socket(server);
 io.on("connection", socket => {
     console.log("Made socket connection", socket.id);
 
-    // welcome user
-    socket.emit('message', 'Welcome!');
+    socket.on('joinRoom', ({ username, roomname }) => {
+        // add user to list of users
+        const user = userJoin(socket.id, username, roomname);
+        socket.join(user.room);
 
-    // broadcast when a user connects
-    socket.broadcast.emit('message', 'A user has joined the chat');
+        // welcome user
+        socket.emit('message', formatMessage('', 'Welcome!'));
 
-    // when user disconnects
-    socket.on('disconnect', () => {
-        console.log('Socket disconnected', socket.id);
-        io.emit('message', 'A user has left the chat');
+        // send to everyone in the room that a user has joined
+        socket.broadcast.to(user.room).emit('message', formatMessage('', `${user.username} has joined the chat`));
+        
+        // send room details to client
+        io.to(user.room).emit('roomUsers', { room: user.room, users: getRoomUsers(user.room) });
     });
+
 
     // listen for messages
     socket.on('chatMessage', msg => {
-        console.log(msg); // works!!!
-        io.emit('message', msg);
+        const user = getCurrentUser(socket.id);
+        io.to(user.room).emit('message', formatMessage(user.username, msg));
+    });
+
+    // when user disconnects
+    socket.on('disconnect', () => {
+        const user = userLeave(socket.id);
+        console.log("Socket disconnected", socket.id);
+        io.to(user.room).emit('message', formatMessage('', `${user.username} has left the chat`));
+
+        // send room details to client
+        io.to(user.room).emit('roomUsers', { room: user.room, users: getRoomUsers(user.room) });
     });
 });
 
