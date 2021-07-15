@@ -53,6 +53,10 @@ chatForm.addEventListener('submit', (e) => {
 function outputMessage(message) {
 	// create a div for the message
 	const div = document.createElement('div');
+	if (message.username === '') {
+		console.log('changed color');
+		div.style.background = '#e6e9ff';
+	}
 	div.classList.add('message');
 
 	// paragraph tag that contains the user and time at which message was sent
