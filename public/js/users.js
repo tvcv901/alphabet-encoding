@@ -9,6 +9,7 @@ const userList = document.getElementById('users');
 const numOfUsers = document.getElementById('number-of-users');
 const chatUrl = window.location.href.toString();
 const getParams = new URL(chatUrl).searchParams;
+const LIGHT_BLUE = '#e6e9ff';
 
 // extract username and roomname from URL
 const username = getParams.get('username');
@@ -56,7 +57,7 @@ function outputMessage(message) {
 	const div = document.createElement('div');
 	if (message.username === '') {
 		console.log('changed color');
-		div.style.background = '#e6e9ff';
+		div.style.background = LIGHT_BLUE;
 	}
 	div.classList.add('message');
 

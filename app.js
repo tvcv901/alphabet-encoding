@@ -2,7 +2,9 @@ const express = require('express');
 const socket = require('socket.io');
 const formatMessage = require('./utils/messages');
 const { userJoin, getCurrentUser, userLeave, getRoomUsers } = require('./utils/users');
-const ROOM_SIZE = 5;
+const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-';
+const ROOM_SIZE = 5; // maximum room size
+const LENGTH = 20;
 
 // stores room codes
 let roomCodes = new Set();
@@ -44,7 +46,6 @@ io.on("connection", socket => {
         io.to(user.room).emit('roomUsers', { room: user.room, users: getRoomUsers(user.room) });
     });
 
-
     // listen for messages from users
     socket.on('chatMessage', msg => {
         const user = getCurrentUser(socket.id);
@@ -70,11 +71,15 @@ io.on("connection", socket => {
         }
     });
 
+    // listening to code requests from users
     socket.on('newCodeRequest', () => {
+        // sending new code to user
         socket.emit('newCodeResponse', generateNewCode());
     });
 
+    // listening to roomcode validation requests from users
     socket.on('checkCode', roomcode => {
+        // sending response to user
         socket.emit('checkCodeResponse', codeInSet(roomcode));
     });
 });
@@ -92,9 +97,7 @@ app.get('*', (req, res) => {
     res.render('404');
 });
 
-const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-';
-const LENGTH = 20;
-
+// function to generate a code
 function generateCode() {
     let code = '';
     for (let i = 0; i < LENGTH; i++) {
@@ -103,6 +106,7 @@ function generateCode() {
     return code;
 }
 
+// function to generate a code that is not in the set of room codes
 function generateNewCode() {
     let code = generateCode();
     while (roomCodes.has(code)) {
@@ -113,6 +117,7 @@ function generateNewCode() {
     return code;
 }
 
+// function that checks if a code is in set of room codes
 function codeInSet(code) {
     console.log(roomCodes.has(code));
     if (roomCodes.has(code)) {
