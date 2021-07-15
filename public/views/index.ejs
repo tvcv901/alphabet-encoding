@@ -7,24 +7,25 @@
     <h3>The Home Page</h3>
     <div class="form-container">
         <main class="form-main">
-            <form action="/chat" class="user-form">
+            <form class="user-form">
                 <div class="user-form-div">
                     <label for="username" class="user-form-label">Username</label>
-                    <input type="text" name="username" id="username" placeholder="Enter username" required>
+                    <input type="text" name="username" id="username" placeholder="Enter username" maxlength="20" required>
                 </div>
                 <div class="user-form-div">
                     <label for="room-name" class="user-form-label">Room Code</label>
                     <p margin="20" style="
                         font-size: 12px;
                     ">(Leave blank if you want to create a new room)</p>
-                    <input type="text" name="room-name" id="room-name" placeholder="Enter room code" style="margin-top: 10px;">
+                    <input type="text" name="room-name" id="room-name" placeholder="Enter room code" pattern="^$|^[a-zA-Z0-9\-]{20}$" style="margin-top: 10px;">
                 </div>
                 <div class="form-submit-div">
-                    <button type="submit" class="btn">Start Chat</button>
+                    <button type="submit" class="btn" onclick="codeChecker()">Start Chat</button>
                 </div>
             </form>
         </main>
     </div>
+    <script type="text/javascript" src="/js/index.js"></script>
 </body>
 
 </html>

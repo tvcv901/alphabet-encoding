@@ -2,6 +2,9 @@ const express = require('express');
 const socket = require('socket.io');
 const formatMessage = require('./utils/messages');
 const { userJoin, getCurrentUser, userLeave, getRoomUsers } = require('./utils/users');
+// const { generateNewCode, codeInSet } = require('./utils/roomcodes');
+
+let roomCodes = new Set();
 
 // creating the app
 const app = express();
@@ -51,12 +54,22 @@ io.on("connection", socket => {
     socket.on('disconnect', () => {
         console.log("Socket disconnected", socket.id);
         
-        // remove user from list of users
         const user = userLeave(socket.id);
-        io.to(user.room).emit('message', formatMessage('', `${user.username} has left the chat`));
+        if (user !== undefined) {
+            // remove user from list of users
+            io.to(user.room).emit('message', formatMessage('', `${user.username} has left the chat`));
+    
+            // send room details to client
+            io.to(user.room).emit('roomUsers', { room: user.room, users: getRoomUsers(user.room) });
+        }
+    });
 
-        // send room details to client
-        io.to(user.room).emit('roomUsers', { room: user.room, users: getRoomUsers(user.room) });
+    socket.on('newCodeRequest', () => {
+        socket.emit('newCodeResponse', generateNewCode());
+    });
+
+    socket.on('checkCode', roomcode => {
+        socket.emit('checkCodeResponse', codeInSet(roomcode));
     });
 });
 
@@ -72,3 +85,29 @@ app.get('/chat', (req, res) => {
 app.get('*', (req, res) => {
     res.render('404');
 });
+
+const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-';
+const LENGTH = 20;
+
+function generateCode() {
+    let code = '';
+    for (let i = 0; i < LENGTH; i++) {
+        code += characters[Math.floor(Math.random() * characters.length)];
+    }
+    return code;
+}
+
+function generateNewCode() {
+    let code = generateCode();
+    while (roomCodes.has(code)) {
+        code = generateCode();
+    }
+    roomCodes.add(code);
+    console.log(code);
+    return code;
+}
+
+function codeInSet(code) {
+    console.log(roomCodes.has(code));
+    return roomCodes.has(code);
+}
