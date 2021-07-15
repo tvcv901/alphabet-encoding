@@ -6,6 +6,7 @@ const chatForm = document.getElementById('chat-form');
 const chatMessages = document.querySelector('.chat-messages');
 const roomName = document.getElementById('room-name');
 const userList = document.getElementById('users');
+const numOfUsers = document.getElementById('number-of-users');
 const chatUrl = window.location.href.toString();
 const getParams = new URL(chatUrl).searchParams;
 
@@ -87,6 +88,7 @@ function outputRoomName(room) {
 
 // write user list in DOM
 function outputUsers(users) {
+	numOfUsers.innerHTML = "Users - " + users.length;
 	userList.innerHTML = ''; 	// make the users list element empty
 	users.forEach((user) => {	// adds the user to the list one-by-one
 		const li = document.createElement('li');	

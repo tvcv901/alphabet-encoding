@@ -2,8 +2,9 @@ const express = require('express');
 const socket = require('socket.io');
 const formatMessage = require('./utils/messages');
 const { userJoin, getCurrentUser, userLeave, getRoomUsers } = require('./utils/users');
-// const { generateNewCode, codeInSet } = require('./utils/roomcodes');
+const ROOM_SIZE = 5;
 
+// stores room codes
 let roomCodes = new Set();
 
 // creating the app
@@ -61,6 +62,11 @@ io.on("connection", socket => {
     
             // send room details to client
             io.to(user.room).emit('roomUsers', { room: user.room, users: getRoomUsers(user.room) });
+
+            // delete room if there are no users in the room
+            if (getRoomUsers(user.room).length === 0) {
+                roomCodes.delete(user.room);
+            }
         }
     });
 
@@ -109,5 +115,8 @@ function generateNewCode() {
 
 function codeInSet(code) {
     console.log(roomCodes.has(code));
-    return roomCodes.has(code);
+    if (roomCodes.has(code)) {
+        return (getRoomUsers(code).length === ROOM_SIZE ? 2 : 1)
+    }
+    return 0;
 }
