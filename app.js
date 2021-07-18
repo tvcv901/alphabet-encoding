@@ -113,13 +113,11 @@ function generateNewCode() {
         code = generateCode();
     }
     roomCodes.add(code);
-    console.log(code);
     return code;
 }
 
 // function that checks if a code is in set of room codes
 function codeInSet(code) {
-    console.log(roomCodes.has(code));
     if (roomCodes.has(code)) {
         return (getRoomUsers(code).length === ROOM_SIZE ? 2 : 1)
     }

@@ -10,11 +10,13 @@ const numOfUsers = document.getElementById('number-of-users');
 const chatUrl = window.location.href.toString();
 const getParams = new URL(chatUrl).searchParams;
 const LIGHT_BLUE = '#e6e9ff';
+const KEY_LENGTH = 256;
+const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-';
 
 // extract username and roomname from URL
 const username = getParams.get('username');
 const roomname = getParams.get('room-name');
-console.log(username, roomname);
+console.log("Name:", username, "\nRoom:", roomname);
 
 // send current user details to server
 socket.emit('joinRoom', { username, roomname });
@@ -27,7 +29,6 @@ socket.on('roomUsers', ({ room, users }) => {
 
 // receive messages from server
 socket.on('message', msg => {
-	console.log(msg); // works
 	outputMessage(msg);
 
 	// scroll to bottom when new message is sent
@@ -42,9 +43,16 @@ chatForm.addEventListener('submit', (e) => {
 	// fetches the message and removes spaces at the end
 	let msg = e.target.elements.msg.value.trim();
 	if (!msg) { return false; }
+	console.log("Message sent:", msg);
+
+	let key = createKey();
+	console.log("Key:", key);
+	let encryptedMessage = encrypt(msg, key);
+	console.log("Encrypted Message:", encryptedMessage);
+	let keyMessage = key + encryptedMessage;
 
 	// emit message to server
-	socket.emit('chatMessage', msg, roomname); // works
+	socket.emit('chatMessage', keyMessage, roomname); // works
 
 	// clear the contents
 	e.target.elements.msg.value = '';
@@ -53,10 +61,17 @@ chatForm.addEventListener('submit', (e) => {
 
 // function to output the message onto the DOM
 function outputMessage(message) {
+	if (message.username !== '') {
+		let key = message.text.substring(0, KEY_LENGTH);
+		let encryptedMessage = message.text.substring(KEY_LENGTH);
+		let decryptedMessage = decrypt(encryptedMessage, key);
+		message.text = decryptedMessage;
+		console.log("Decrypted Message:", message.text);
+	}
+
 	// create a div for the message
 	const div = document.createElement('div');
 	if (message.username === '') {
-		console.log('changed color');
 		div.style.background = LIGHT_BLUE;
 	}
 	div.classList.add('message');
@@ -103,3 +118,19 @@ document.getElementById('leave-btn').addEventListener('click', () => {
   const leaveRoom = confirm('Are you sure you want to leave the chatroom?');
   if (leaveRoom) { window.location.assign('http://localhost:3000/'); }
 });
+
+function createKey() {
+	let key = '';
+	for (let i = 0; i < KEY_LENGTH; i++) {
+		key += characters[Math.floor(Math.random() * characters.length)];
+	}
+	return key;
+}
+
+function encrypt(message, key) {
+  return CryptoJS.AES.encrypt(message, key).toString();
+}
+
+function decrypt(message, key) {
+  return CryptoJS.AES.decrypt(message, key).toString(CryptoJS.enc.Utf8);
+}
