@@ -79,7 +79,7 @@ function outputMessage(message) {
 	// paragraph tag that contains the user and time at which message was sent
 	const p = document.createElement('p');
 	p.classList.add('meta');
-	p.innerText = message.username;
+	p.innerText = message.username
 	p.innerHTML += ` <span>${message.time}</span>`;
 
 	// add above paragraph tag to div
@@ -88,7 +88,7 @@ function outputMessage(message) {
 	// create a paragraph tag to store the message
 	const para = document.createElement('p');
 	para.classList.add('text');
-	para.innerText = message.text;
+	para.innerHTML = anchorme(message.text);
 	
 	// add the paragraph tag to the div
 	div.appendChild(para);
