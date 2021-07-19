@@ -3,24 +3,25 @@
 <%- include('./partials/header.ejs') %>
 
 <body>
-    <h2><a href="/">Alphabet Encoding</a></h2>
-    <h3>The Home Page</h3>
-    <div class="form-container">
-        <main class="form-main">
+    <h2 style="color: aliceblue;"><a href="/" style="color: aliceblue;">Enigma</a></h2>
+    <!-- <h3>The Home Page</h3> -->
+    <div class="form-container" >
+        <main class="form-main" style="width:400px;">
             <form class="user-form">
                 <div class="user-form-div">
                     <label for="username" class="user-form-label">Username</label>
-                    <input type="text" name="username" id="username" placeholder="Enter username" maxlength="20" required>
+                    <input type="text" name="username" id="username" placeholder="Enter username" style="background-color:  rgb(247, 242, 242);" maxlength="20" required>
                 </div>
                 <div class="user-form-div">
-                    <label for="room-name" class="user-form-label">Room Code</label>
+                    <label for="room-name" class="user-form-label" >Room Code</label>
                     <p margin="20" style="
                         font-size: 12px;
-                    ">(Leave blank if you want to create a new room)</p>
-                    <input type="text" name="room-name" id="room-name" placeholder="Enter room code" pattern="^$|^[a-zA-Z0-9\-]{20}$" style="margin-top: 10px;">
+                        color: rgb(184, 180, 180);
+                    ">(Leave blank to create a new room)</p>
+                    <input style="background-color: rgb(247, 242, 242); border-radius: 2px;" type="text" name="room-name" id="room-name" placeholder="Enter room code" pattern="^$|^[a-zA-Z0-9\-]{20}$" style="margin-top: 10px;">
                 </div>
                 <div class="form-submit-div">
-                    <button type="submit" class="btn" onclick="codeChecker()">Start Chat</button>
+                    <button type="submit" class="btn" onclick="codeChecker()" style="background-color: orange; border-radius: 6px; color: rgb(102, 100, 100);">Join</button>
                 </div>
             </form>
         </main>

@@ -37,7 +37,7 @@ io.on("connection", socket => {
         socket.join(user.room);
 
         // welcome user
-        socket.emit('message', formatMessage('', 'Welcome!'));
+        socket.emit('message', formatMessage( '',`Welcome! ${user.username}`));
 
         // send to everyone in the room that a user has joined
         socket.broadcast.to(user.room).emit('message', formatMessage('', `${user.username} has joined the chat`));
@@ -49,6 +49,7 @@ io.on("connection", socket => {
     // listen for messages from users
     socket.on('chatMessage', msg => {
         const user = getCurrentUser(socket.id);
+        // console.log(msg);
         io.to(user.room).emit('message', formatMessage(user.username, msg));
     });
 

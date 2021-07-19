@@ -10,7 +10,8 @@
     "type": "git",
     "url": "git+https://github.com/tvcv901/alphabet-encoding.git"
   },
-  "author": "Chandra Vamsi",
+  "author": "Chandra Vamsi", 
+  "author" :"Akshay Wakhare",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/tvcv901/alphabet-encoding/issues"
