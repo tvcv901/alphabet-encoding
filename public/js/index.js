@@ -50,13 +50,12 @@ socket.on('checkCodeResponse', response => {
 		valid = response;
 		// if response is ok, continue to chat page
 		window.location.assign('http://localhost:3000/chat?' + 'username=' + username.value + '&room-name=' + room_name.value);
-	} else {
+	} else if(response === 2){
 		// room is full
-		if (response === 2) {
 			alert('Room is full!');
 			return;
-		}
-		
+	}else{
+	
 		// response is not ok (code entered by user is not in use)
 		let enteredUsername = document.getElementById('username').value; // get username
 		alert('The code entered is invalid. Please enter a valid code.');

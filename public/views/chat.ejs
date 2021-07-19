@@ -3,26 +3,29 @@
 
 <%- include('./partials/header.ejs') %>
 <body>
-    <h2> <a href="/">Alphabet Encoding</a> </h2>
-    <h3>Chatroom</h3>
-    <div class="chat-container">
+    <!-- <h2 style="color: aliceblue;"> <a href="/" style="color: aliceblue ;">Alphabet Encoding</a> </h2> -->
+    <h3 style="color: aliceblue;">Chatroom</h3>
+    <div class="chat-container" style="width: 800px;">
         <header class="chat-header">
-            <h1>Name of app here</h1>
-            <a id="leave-btn" class="btn">Leave Room</a>
+            <h1>Enigma</h1>
+            <a id="leave-btn" class="btn" >Leave Room</a>
         </header>
-        <main class="chat-main">
+        <main class="chat-main"  >
             <div class="chat-sidebar">
-                <h3>Room Name:</h3>
+                <h3>Room Code:</h3>
                 <h4 id="room-name"></h4>
                 <h3 id="number-of-users">Users - </h3>
                 <ul id="users"></ul>
+                <!-- <iframe src="../sd1XnM.png"   height="f" frameBorder="0" class="giphy-embed" allowFullScreen>
+                </iframe> -->
             </div>
-            <div class="chat-messages"></div>
+            
+            <div class="chat-messages" ></div>
         </main>
         <div class="chat-form-container">
             <form id="chat-form">
-                <input type="text" id="msg" placeholder="Type a message" required autocomplete="off">
-                <button class="btn">Send</button>
+                <input type="text" id="msg" placeholder="Type a message" style="background-color: rgba(224, 221, 221, 0.774); border-radius: 6px;" required autocomplete="off">
+                <button class="btn" style="background-color: orange; border-radius: 6px;" >Send</button>
             </form>
         </div>
     </div>

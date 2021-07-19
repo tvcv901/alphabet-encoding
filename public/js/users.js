@@ -11,7 +11,7 @@ const chatUrl = window.location.href.toString();
 const getParams = new URL(chatUrl).searchParams;
 const LIGHT_BLUE = '#e6e9ff';
 const KEY_LENGTH = 256;
-const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-';
+const characters = `abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890~!@#$%^&*()_+=-{}|[]',./:"<>?"`;
 
 // extract username and roomname from URL
 const username = getParams.get('username');
@@ -92,7 +92,7 @@ function outputMessage(message) {
 	
 	// add the paragraph tag to the div
 	div.appendChild(para);
-
+	// div.style="float:left;";
 	// adds this div to the chat area
 	document.querySelector('.chat-messages').appendChild(div);
 }
@@ -124,6 +124,7 @@ function createKey() {
 	for (let i = 0; i < KEY_LENGTH; i++) {
 		key += characters[Math.floor(Math.random() * characters.length)];
 	}
+ 
 	return key;
 }
 
