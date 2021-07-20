@@ -83,6 +83,10 @@ io.on("connection", socket => {
         // sending response to user
         socket.emit('checkCodeResponse', codeInSet(roomcode));
     });
+
+    socket.on('addRoom', (room) => {
+        roomCodes.add(room);
+    });
 });
 
 // handling routes

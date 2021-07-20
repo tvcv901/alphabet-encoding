@@ -25,6 +25,9 @@ socket.emit('joinRoom', { username, roomname });
 socket.on('roomUsers', ({ room, users }) => {
 	outputRoomName(room);
 	outputUsers(users);
+	if (users.length === 1) {
+		socket.emit('addRoom', room);
+	}
 });
 
 // receive messages from server
