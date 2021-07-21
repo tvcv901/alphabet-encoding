@@ -9,6 +9,7 @@ const userList = document.getElementById('users');
 const numOfUsers = document.getElementById('number-of-users');
 const chatUrl = window.location.href.toString();
 const getParams = new URL(chatUrl).searchParams;
+
 const LIGHT_BLUE = '#e6e9ff';
 const PASSCODE_LENGTH = 256;
 const characters = `abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890~!@#$%^&*()_+=-{}|[]',./:"<>?"`;
@@ -19,6 +20,7 @@ const username = getParams.get('username');
 const roomname = getParams.get('room-name');
 console.log("Name:", username, "\nRoom:", roomname);
 
+// check if username and roomcode is valid
 if (username === '' || username.length > 20 || !checkCodeSyntax(roomname)) {
 	window.location.assign('http://localhost:3000/invalid');
 }
@@ -127,24 +129,26 @@ document.getElementById('leave-btn').addEventListener('click', () => {
   if (leaveRoom) { window.location.assign('http://localhost:3000/'); }
 });
 
+// function to generate a random passphrase
 function createKey() {
 	let key = '';
 	for (let i = 0; i < PASSCODE_LENGTH; i++) {
 		key += characters[Math.floor(Math.random() * characters.length)];
 	}
- 
 	return key;
 }
 
+// function to check whether roomcode has proper syntax
 function checkCodeSyntax(code) {
 	for (let i = 0; i < code.length; i++) {
-		if (characters.indexOf(code[i]) === -1) {
+		if (roomCodeCharacters.indexOf(code[i]) === -1) {
 			return 0;
 		}
 	}
 	return (code.length === 20);
 }
 
+// functions to encrypt and decrypt message using the randomly generated key
 function encrypt(message, key) {
   return CryptoJS.AES.encrypt(message, key).toString();
 }
