@@ -10,13 +10,18 @@ const numOfUsers = document.getElementById('number-of-users');
 const chatUrl = window.location.href.toString();
 const getParams = new URL(chatUrl).searchParams;
 const LIGHT_BLUE = '#e6e9ff';
-const KEY_LENGTH = 256;
+const PASSCODE_LENGTH = 256;
 const characters = `abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890~!@#$%^&*()_+=-{}|[]',./:"<>?"`;
+const roomCodeCharacters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-';
 
 // extract username and roomname from URL
 const username = getParams.get('username');
 const roomname = getParams.get('room-name');
 console.log("Name:", username, "\nRoom:", roomname);
+
+if (username === '' || username.length > 20 || !checkCodeSyntax(roomname)) {
+	window.location.assign('http://localhost:3000/invalid');
+}
 
 // send current user details to server
 socket.emit('joinRoom', { username, roomname });
@@ -65,8 +70,8 @@ chatForm.addEventListener('submit', (e) => {
 // function to output the message onto the DOM
 function outputMessage(message) {
 	if (message.username !== '') {
-		let key = message.text.substring(0, KEY_LENGTH);
-		let encryptedMessage = message.text.substring(KEY_LENGTH);
+		let key = message.text.substring(0, PASSCODE_LENGTH);
+		let encryptedMessage = message.text.substring(PASSCODE_LENGTH);
 		let decryptedMessage = decrypt(encryptedMessage, key);
 		message.text = decryptedMessage;
 		console.log("Decrypted Message:", message.text);
@@ -124,11 +129,20 @@ document.getElementById('leave-btn').addEventListener('click', () => {
 
 function createKey() {
 	let key = '';
-	for (let i = 0; i < KEY_LENGTH; i++) {
+	for (let i = 0; i < PASSCODE_LENGTH; i++) {
 		key += characters[Math.floor(Math.random() * characters.length)];
 	}
  
 	return key;
+}
+
+function checkCodeSyntax(code) {
+	for (let i = 0; i < code.length; i++) {
+		if (characters.indexOf(code[i]) === -1) {
+			return 0;
+		}
+	}
+	return (code.length === 20);
 }
 
 function encrypt(message, key) {
