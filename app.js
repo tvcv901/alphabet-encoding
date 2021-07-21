@@ -98,6 +98,10 @@ app.get('/chat', (req, res) => {
     res.render('chat');
 });
 
+app.get('/invalid', (req, res) => {
+    res.render('invalid');
+});
+
 app.get('*', (req, res) => {
     res.render('404');
 });
