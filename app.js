@@ -15,6 +15,7 @@ const app = express();
 // start listening on port 3000
 const server = app.listen(3000, () => {
     console.log("listening on port 3000");
+    console.log("Press ctrl + C to exit");
 });
 
 // registering view engine
@@ -28,7 +29,7 @@ app.use(express.static(__dirname + '/public'));
 const io = socket(server);
 
 io.on("connection", socket => {
-    console.log("Made socket connection", socket.id);
+    // console.log("Made socket connection", socket.id);
 
     // run when a user joins
     socket.on('joinRoom', ({ username, roomname }) => {
@@ -55,7 +56,7 @@ io.on("connection", socket => {
 
     // when user disconnects
     socket.on('disconnect', () => {
-        console.log("Socket disconnected", socket.id);
+        // console.log("Socket disconnected", socket.id);
         
         const user = userLeave(socket.id);
         if (user !== undefined) {

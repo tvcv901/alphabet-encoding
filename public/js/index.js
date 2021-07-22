@@ -1,29 +1,18 @@
-/*
-	When submit button is clicked, this script should validate the form details entered by the user
-	username will be automatically checked by html code
-	roomcode syntax will be automatically checked by html code
-
-	if roomcode is empty, the user wants to create a new room
-	to create a new room, we need to use a room code that is not being used
-
-	if roomcode is not empty and syntactically correct, the user wants to join an existing room
-	to get the user to that room, we need to check if the roomcode entered is currently in use
-
-		if the roomcode is currently in use, then the user joins the room with the entered roomcode
-		else, prompt the user to enter roomcode again
-*/
-
 const socket = io();
 let room_name = document.getElementById('room-name');
 let username = document.getElementById('username');
 let userForm = document.querySelector('.user-form');
 
 function codeChecker() {
-	if (username.value !== '') {
+	if (username.value.trim() !== '') {
 		userForm.addEventListener('submit', (e) => {
 			e.preventDefault();
 		});
-	} else { return; }
+	} else {
+		window.location.assign('http://localhost:3000');
+		alert('Please enter a valid username (Spaces at the start and end are ignored)');
+		return;
+	}
 	console.log(room_name.value);
 	if (room_name.value === '') {
 		generateNewCode();
@@ -50,12 +39,11 @@ socket.on('checkCodeResponse', response => {
 		valid = response;
 		// if response is ok, continue to chat page
 		window.location.assign('http://localhost:3000/chat?' + 'username=' + username.value + '&room-name=' + room_name.value);
-	} else if(response === 2){
+	} else if (response === 2){
 		// room is full
 			alert('Room is full!');
 			return;
-	}else{
-	
+	} else {
 		// response is not ok (code entered by user is not in use)
 		let enteredUsername = document.getElementById('username').value; // get username
 		alert('The code entered is invalid. Please enter a valid code.');
